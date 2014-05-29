@@ -88,14 +88,17 @@
                 var domEl = el[0];
                 var bounds = domEl.getBoundingClientRect();
                 var style = domEl.style;
+                var width = (
+                    domEl.clientWidth - style.borderLeftWidth -
+                    style.borderRightWidth
+                );
+                var units = "px";
                 scope.resultsStyle = {
                     position: "fixed",
-                    top: bounds.top + bounds.height + "px",
-                    left: bounds.left + "px",
-                    width: (
-                        domEl.clientWidth - style.borderLeftWidth -
-                        style.borderRightWidth + "px"
-                    )
+                    top: bounds.top + bounds.height + units,
+                    left: bounds.left + units,
+                    width: width + units,
+                    'min-width': width + units
                 };
             }
         });
