@@ -177,8 +177,12 @@
                     });
                 // Source returned a list
                 } else {
-                    scope.isVisible = true;
-                    scope.results = returned.slice(0, maxItems);
+                    if (returned.length) {
+                        scope.isVisible = true;
+                        scope.results = returned.slice(0, maxItems);
+                    } else {
+                        scope.isVisible = false;
+                    }
                 }
             }, scope.delay || DEFAULTS.delay);
         });
