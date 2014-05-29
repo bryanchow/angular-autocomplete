@@ -44,7 +44,7 @@
         DOWN: 40
     };
 
-    function link(scope, el, attrs, $compile, $timeout) {
+    function link(scope, el, $compile, $timeout) {
 
         angular.extend(scope, {
             results: [],
@@ -158,7 +158,6 @@
                 return;
             }
             searchTimeout = $timeout(function() {
-                var items = [];
                 var maxItems = scope.maxItems || DEFAULTS.maxItems;
                 var returned = scope.sourceFn(query);
                 // Source returned a promise
@@ -180,7 +179,7 @@
             }, scope.delay || DEFAULTS.delay);
         });
 
-        el.bind('blur', function(e) {
+        el.bind('blur', function() {
             scope.isVisible = false;
             scope.$apply();
         });
@@ -194,8 +193,8 @@
                 restrict: 'AE',
                 scope: SCOPE,
                 template: '<input type="text" />',
-                link: function(scope, el, attrs) {
-                    return link(scope, el, attrs, $compile, $timeout);
+                link: function(scope, el) {
+                    return link(scope, el, $compile, $timeout);
                 }
             };
         }
