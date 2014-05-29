@@ -93,6 +93,10 @@
             }
         });
 
+        scope.$watch('results', function(index) {
+            scope.selectedIndex = -1;
+        }, true);
+
         scope.$watch('isVisible', function(isVisible) {
             if (isVisible) {
                 var domEl = el[0];
