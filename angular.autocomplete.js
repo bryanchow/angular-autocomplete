@@ -58,7 +58,7 @@
             'class="autocomplete-results" ng-show="isVisible" ' +
             'ng-style="resultsStyle" class="searchresultspopup">' +
             '<li ng-class="{selected: isSelected($index)}" ' +
-            'ng-click="selectItem($index)" ng-repeat="item in results">' +
+            'ng-mousedown="selectItem($index)" ng-repeat="item in results">' +
             (scope.itemTemplate || DEFAULTS.itemTemplate) + '</li></ul>'
         );
         document.body.appendChild($compile(resultsTemplate)(scope)[0]);
