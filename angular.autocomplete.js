@@ -11,6 +11,7 @@
     var module = angular.module('ff.autocomplete', []);
 
     var SCOPE = {
+        sourceFn: '=',
         callback: '=',
         minQueryLen: '=?',
         maxQueryLen: '=?',
@@ -51,6 +52,8 @@
             isVisible: false
         });
 
+        scope.callback = scope.callback || function() {};
+
         var searchTimeout;
 
         var resultsTemplate = (
@@ -68,18 +71,25 @@
         };
 
         scope.selectItem = function(index) {
-            scope.selectedIndex = index;
-            scope.isVisible = false;
+            if (parseInt(index, 10) >= 0) {
+                scope.selectedIndex = index;
+            }
+            didSelectItem();
         };
+
+        function didSelectItem() {
+            scope.isVisible = false;
+            scope.callback(scope.results[scope.selectedIndex]);
+        }
+
+        function getItemVal(item) {
+            return scope.selectField ? item[scope.selectField] : item;
+        }
 
         scope.$watch('selectedIndex', function(index) {
             var item = scope.results[index];
             if (item) {
-                if (scope.selectField) {
-                    el.val(item[scope.selectField]);
-                } else {
-                    el.val(item);
-                }
+                el.val(getItemVal(item));
             }
         });
 
@@ -117,7 +127,14 @@
                     scope.selectedIndex + 1 : 0
                 );
             } if (e.keyCode == KEYS.ENTER || e.keyCode == KEYS.TAB) {
-                scope.isVisible = false;
+                if (
+                    scope.selectedIndex >= 0 &&
+                    el.val() === getItemVal(scope.results[scope.selectedIndex])
+                ) {
+                    didSelectItem();
+                } else {
+                    scope.isVisible = false;
+                }
             }
             scope.$apply();
         });
@@ -143,8 +160,8 @@
             searchTimeout = $timeout(function() {
                 var items = [];
                 var maxItems = scope.maxItems || DEFAULTS.maxItems;
-                var returned = scope.callback(query);
-                // Callback returned a promise
+                var returned = scope.sourceFn(query);
+                // Source returned a promise
                 if (returned && returned.then) {
                     returned.then(function(data) {
                         scope.selectedIndex = -1;
@@ -155,7 +172,7 @@
                             scope.isVisible = false;
                         }
                     });
-                // Callback returned a list
+                // Source returned a list
                 } else {
                     scope.isVisible = true;
                     scope.results = returned.slice(0, maxItems);

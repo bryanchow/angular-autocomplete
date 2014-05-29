@@ -10,7 +10,7 @@ Usage
 
 Markup:
 
-    <input autocomplete callback="callback" />
+    <input autocomplete source-fn="getSuggestions" />
 
 
 JS:
@@ -20,7 +20,7 @@ JS:
     module.controller('MyController', [
         '$scope', function($scope) {
 
-            $scope.callback = function(query) {
+            $scope.getSuggestions = function(query) {
                 return [
                     "Los Angeles, CA",
                     "New York, NY",
