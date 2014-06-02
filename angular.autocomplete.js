@@ -95,8 +95,8 @@
             }
         });
 
-        scope.$watch('results', function(index) {
-            scope.selectedIndex = -1;
+        scope.$watch('results', function(results) {
+            scope.isVisible = (results.length !== 0);
         }, true);
 
         scope.$watch('isVisible', function(isVisible) {
@@ -123,11 +123,17 @@
         el.bind('keydown', function(e) {
             var max = scope.results.length - 1;
             if (e.keyCode == KEYS.UP) {
+                if (scope.results) {
+                    scope.isVisible = true;
+                }
                 scope.selectedIndex = (
                     scope.selectedIndex > 0 ?
                     scope.selectedIndex - 1 : max
                 );
             } else if (e.keyCode == KEYS.DOWN) {
+                if (scope.results.length) {
+                    scope.isVisible = true;
+                }
                 scope.selectedIndex = (
                     scope.selectedIndex < max ?
                     scope.selectedIndex + 1 : 0
