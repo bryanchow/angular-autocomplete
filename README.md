@@ -10,7 +10,9 @@ Usage
 
 Markup:
 
-    <input autocomplete source-fn="getSuggestions" />
+    <div ng-controller="MyController">
+        <input autocomplete autocomplete-fn="getSuggestions" />
+    </div>
 
 
 JS:

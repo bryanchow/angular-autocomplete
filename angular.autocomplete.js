@@ -10,16 +10,18 @@
 
     var module = angular.module('ff.autocomplete', []);
 
+    var namespace = 'autocomplete';
+
     var SCOPE = {
-        sourceFn: '=',
-        callback: '=',
-        minQueryLen: '=?',
-        maxQueryLen: '=?',
-        maxItems: '=?',
-        resultsId: '@',
-        itemTemplate: '=?',
-        selectField: '@',
-        delay: '=?'
+        sourceFn: '=' + namespace + 'Fn',
+        callback: '=' + namespace + 'Callback',
+        minQueryLen: '=?' + namespace + 'MinQueryLen',
+        maxQueryLen: '=?' + namespace + 'MaxQueryLen',
+        maxItems: '=?' + namespace + 'MaxItems',
+        resultsId: '@' + namespace + 'ResultsId',
+        itemTemplate: '=?' + namespace + 'ItemTemplate',
+        selectField: '@' + namespace + 'SelectField',
+        delay: '=?' + namespace + 'Delay'
     };
 
     var DEFAULTS = {
@@ -59,7 +61,7 @@
         var resultsTemplate = (
             '<ul id="' + (scope.resultsId || DEFAULTS.resultsId) + '" ' +
             'class="autocomplete-results" ng-show="isVisible" ' +
-            'ng-style="resultsStyle" class="searchresultspopup">' +
+            'ng-style="resultsStyle" class="autocomplete-results">' +
             '<li ng-class="{selected: isSelected($index)}" ' +
             'ng-mousedown="selectItem($index)" ng-repeat="item in results">' +
             (scope.itemTemplate || DEFAULTS.itemTemplate) + '</li></ul>'
