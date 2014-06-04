@@ -4,6 +4,15 @@ angular-autocomplete
 angular-autocomplete is a minimalist Angular.js directive for adding
 auto-complete dropdowns to text inputs.
 
+* Does not require jQuery or any other external libraries
+* Up and down arrow key handling
+* Item selection on tab and enter
+* Item selection on mouse click
+* Close dropdown on blur
+
+Minimal CSS styles are set by the directive to make the dropdown easy to
+customize.
+
 
 Usage
 -----
