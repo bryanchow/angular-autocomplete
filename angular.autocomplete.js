@@ -36,6 +36,7 @@
     var KEYS = {
         TAB: 9,
         ENTER: 13,
+        SHIFT: 16,
         END: 35,
         PAGE_UP: 33,
         PAGE_DOWN: 34,
