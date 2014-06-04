@@ -91,8 +91,8 @@
         }
 
         function didSelectItem() {
-            hideResults();
             scope.callback(scope.results[scope.selectedIndex]);
+            hideResults();
         }
 
         function getItemVal(item) {
