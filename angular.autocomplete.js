@@ -172,25 +172,27 @@
             searchTimeout = $timeout(function() {
                 var maxItems = scope.maxItems || DEFAULTS.maxItems;
                 var returned = scope.sourceFn(query);
-                // Source returned a promise
-                if (returned && returned.then) {
-                    returned.then(function(data) {
-                        scope.selectedIndex = -1;
-                        if (data && data.length) {
-                            scope.results = data.slice(0, maxItems);
-                            scope.isVisible = true;
-                        } else {
-                            scope.isVisible = false;
-                        }
-                    });
-                // Source returned a list
-                } else {
-                    if (returned.length) {
+                if (returned) {
+                    // Source returned a promise
+                    if (returned.then) {
+                        returned.then(function(data) {
+                            scope.selectedIndex = -1;
+                            if (data && data.length) {
+                                scope.results = data.slice(0, maxItems);
+                                scope.isVisible = true;
+                            } else {
+                                scope.isVisible = false;
+                            }
+                        });
+                    // Source returned a list
+                    } else if (returned.length) {
                         scope.isVisible = true;
                         scope.results = returned.slice(0, maxItems);
                     } else {
                         scope.isVisible = false;
                     }
+                } else {
+                    scope.isVisible = false;
                 }
             }, scope.delay || DEFAULTS.delay);
         });
