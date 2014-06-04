@@ -79,8 +79,18 @@
             didSelectItem();
         };
 
-        function didSelectItem() {
+        function showResults() {
+            if (el[0] == document.activeElement) {
+                scope.isVisible = true;
+            }
+        }
+
+        function hideResults() {
             scope.isVisible = false;
+        }
+
+        function didSelectItem() {
+            hideResults();
             scope.callback(scope.results[scope.selectedIndex]);
         }
 
@@ -96,7 +106,11 @@
         });
 
         scope.$watch('results', function(results) {
-            scope.isVisible = (results.length !== 0);
+            if (results.length > 0) {
+                showResults();
+            } else {
+                hideResults();
+            }
         }, true);
 
         scope.$watch('isVisible', function(isVisible) {
@@ -124,7 +138,7 @@
             var max = scope.results.length - 1;
             if (e.keyCode == KEYS.UP) {
                 if (scope.results) {
-                    scope.isVisible = true;
+                    showResults();
                 }
                 scope.selectedIndex = (
                     scope.selectedIndex > 0 ?
@@ -132,7 +146,7 @@
                 );
             } else if (e.keyCode == KEYS.DOWN) {
                 if (scope.results.length) {
-                    scope.isVisible = true;
+                    showResults();
                 }
                 scope.selectedIndex = (
                     scope.selectedIndex < max ?
@@ -145,7 +159,7 @@
                 ) {
                     didSelectItem();
                 } else {
-                    scope.isVisible = false;
+                    hideResults();
                 }
             }
             scope.$apply();
@@ -165,8 +179,9 @@
                 query.length < (scope.minQueryLen || DEFAULTS.minQueryLen) ||
                 query.length > (scope.maxQueryLen || DEFAULTS.maxQueryLen)
             ) {
-                scope.isVisible = false;
-                scope.$apply();
+                scope.$apply(function() {
+                    hideResults();
+                });
                 return;
             }
             searchTimeout = $timeout(function() {
@@ -179,27 +194,28 @@
                             scope.selectedIndex = -1;
                             if (data && data.length) {
                                 scope.results = data.slice(0, maxItems);
-                                scope.isVisible = true;
+                                showResults();
                             } else {
-                                scope.isVisible = false;
+                                hideResults();
                             }
                         });
                     // Source returned a list
                     } else if (returned.length) {
-                        scope.isVisible = true;
+                        showResults();
                         scope.results = returned.slice(0, maxItems);
                     } else {
-                        scope.isVisible = false;
+                        hideResults();
                     }
                 } else {
-                    scope.isVisible = false;
+                    hideResults();
                 }
             }, scope.delay || DEFAULTS.delay);
         });
 
         el.bind('blur', function() {
-            scope.isVisible = false;
-            scope.$apply();
+            scope.$apply(function() {
+                hideResults();
+            });
         });
 
     }
