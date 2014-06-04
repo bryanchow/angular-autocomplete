@@ -30,7 +30,7 @@
         maxItems: 20,
         resultsId: "",
         itemTemplate: "{{ item }}",
-        delay: 100
+        delay: 200
     };
 
     var KEYS = {
