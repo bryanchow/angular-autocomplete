@@ -87,6 +87,7 @@
 
         function hideResults() {
             scope.isVisible = false;
+            scope.selectedIndex = -1;
         }
 
         function didSelectItem() {
@@ -196,6 +197,7 @@
                                 scope.results = data.slice(0, maxItems);
                                 showResults();
                             } else {
+                                scope.results = [];
                                 hideResults();
                             }
                         });
@@ -204,6 +206,7 @@
                         showResults();
                         scope.results = returned.slice(0, maxItems);
                     } else {
+                        scope.results = [];
                         hideResults();
                     }
                 } else {
