@@ -218,6 +218,12 @@
 
         el.bind('blur', function() {
             scope.$apply(function() {
+                if (
+                    scope.selectedIndex >= 0 &&
+                    el.val() === getItemVal(scope.results[scope.selectedIndex])
+                ) {
+                    didSelectItem();
+                }
                 hideResults();
             });
         });
