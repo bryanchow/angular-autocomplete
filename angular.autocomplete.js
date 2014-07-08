@@ -97,7 +97,11 @@
         }
 
         function getItemVal(item) {
-            return scope.selectField ? item[scope.selectField] : item;
+            return (
+                scope.selectField && item &&
+                item.hasOwnProperty(scope.selectField) ?
+                item[scope.selectField] : item
+            );
         }
 
         scope.$watch('selectedIndex', function(index) {
