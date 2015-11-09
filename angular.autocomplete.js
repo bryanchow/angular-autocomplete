@@ -25,6 +25,7 @@
     };
 
     var DEFAULTS = {
+        fixed: false,
         minQueryLen: 1,
         maxQueryLen: 20,
         maxItems: 20,
@@ -47,7 +48,7 @@
         DOWN: 40
     };
 
-    function link(scope, el, $compile, $timeout) {
+    function link(scope, el, attrs, $window, $compile, $timeout) {
 
         angular.extend(scope, {
             results: [],
@@ -57,7 +58,9 @@
 
         scope.callback = scope.callback || function() {};
 
+        var isFixed = attrs.fixed || DEFAULTS.fixed;
         var searchTimeout;
+        var px = "px";
 
         var resultsTemplate = (
             '<ul id="' + (scope.resultsId || DEFAULTS.resultsId) + '" ' +
@@ -122,20 +125,32 @@
         scope.$watch('isVisible', function(isVisible) {
             if (isVisible) {
                 var domEl = el[0];
-                var bounds = domEl.getBoundingClientRect();
                 var style = domEl.style;
                 var width = (
                     domEl.clientWidth - style.borderLeftWidth -
                     style.borderRightWidth
                 );
-                var units = "px";
-                scope.resultsStyle = {
-                    position: "fixed",
-                    top: bounds.top + bounds.height + units,
-                    left: bounds.left + units,
-                    width: width + units,
-                    'min-width': width + units
-                };
+                var bounds = domEl.getBoundingClientRect();
+                if (isFixed) {
+                    scope.resultsStyle = {
+                        position: "fixed",
+                        top: bounds.top + bounds.height + px,
+                        left: bounds.left + px,
+                        width: width + px,
+                        'min-width': width + px
+                    };
+                } else {
+                    scope.resultsStyle = {
+                        position: "absolute",
+                        top: (
+                            bounds.top + $window.scrollY +
+                            el[0].offsetHeight + px
+                        ),
+                        left: bounds.left + $window.scrollX + px,
+                        width: width + px,
+                        'min-width': width + px
+                    };
+                }
             }
         });
 
@@ -235,14 +250,16 @@
     }
 
     module.directive('autocomplete', [
-        '$compile', '$timeout',
-        function($compile, $timeout) {
+        '$window', '$compile', '$timeout',
+        function($window, $compile, $timeout) {
             return {
                 restrict: 'AE',
                 scope: SCOPE,
                 template: '<input type="text" />',
-                link: function(scope, el) {
-                    return link(scope, el, $compile, $timeout);
+                link: function(scope, el, attrs) {
+                    return link(
+                        scope, el, attrs, $window, $compile, $timeout
+                    );
                 }
             };
         }
