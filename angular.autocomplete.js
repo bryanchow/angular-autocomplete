@@ -95,7 +95,7 @@
         }
 
         function didSelectItem() {
-            scope.callback(scope.results[scope.selectedIndex]);
+            scope.callback(scope.results[scope.selectedIndex], el);
             hideResults();
         }
 
